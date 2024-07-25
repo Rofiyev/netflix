@@ -1,5 +1,6 @@
 "use client";
 
+import { Dispatch, FC, SetStateAction } from "react";
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { createAccountSchema } from "@/lib/validate";
@@ -16,8 +17,20 @@ import {
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import PinInput from "react-pin-input";
+import axios from "axios";
+import { AccountResponse, IAccount } from "@/types";
+import useModal from "@/zustand/modal";
+import { toast } from "../ui/use-toast";
+import Loading from "../Loading";
 
-const CreateAccountForm = () => {
+interface Props {
+  uid: string;
+  accounts: IAccount[];
+  setAccounts: Dispatch<SetStateAction<IAccount[]>>;
+}
+
+const CreateAccountForm: FC<Props> = ({ uid, accounts, setAccounts }) => {
+  const { setOpen } = useModal();
   const form = useForm<z.infer<typeof createAccountSchema>>({
     resolver: zodResolver(createAccountSchema),
     defaultValues: { name: "", pin: "" },
@@ -29,7 +42,33 @@ const CreateAccountForm = () => {
   } = form;
 
   const onSubmit = async (values: z.infer<typeof createAccountSchema>) => {
-    console.log(values);
+    try {
+      const { data } = await axios.post<AccountResponse>("/api/account", {
+        ...values,
+        uid,
+      });
+      if (data.success) {
+        setAccounts([...accounts, data.data as IAccount]);
+        setOpen(false);
+        form.reset();
+        return toast({
+          title: data.message,
+          description: "Your account has been created successfully!",
+        });
+      } else {
+        return toast({
+          title: data.message,
+          description: "You cannot create an account that already exists!",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      return toast({
+        title: "Error creating",
+        description: "An error occurred while creating your account!",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
@@ -105,6 +144,7 @@ const CreateAccountForm = () => {
             disabled={isSubmitting}
           >
             Create Account
+            {isSubmitting && <Loading className="ml-2" />}
           </Button>
         </form>
       </Form>

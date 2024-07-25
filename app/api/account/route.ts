@@ -13,7 +13,7 @@ export async function POST(req: Request) {
     const { name, uid, pin } = await req.json();
 
     const allAcounts = await Account.find({ uid });
-    const isExist = await Account.findOne({ name });
+    const isExist = await Account.findOne({ name, uid });
 
     if (isExist)
       return NextResponse.json({
@@ -21,7 +21,7 @@ export async function POST(req: Request) {
         message: "You already have an account",
       });
 
-    if (allAcounts && allAcounts.length >= 3)
+    if (allAcounts && allAcounts.length > 4)
       return NextResponse.json({
         success: false,
         message: "You can only have 4 accounts",
@@ -30,7 +30,7 @@ export async function POST(req: Request) {
     const hashPin = await hash(pin, 10);
     const account = await Account.create({ name, uid, pin: hashPin });
 
-    return NextResponse.json({ success: true, account });
+    return NextResponse.json({ success: true, data: account });
   } catch (e) {
     return NextResponse.json({
       success: false,
@@ -55,7 +55,7 @@ export async function GET(req: Request) {
 
     const accounts = await Account.find({ uid });
 
-    return NextResponse.json({ success: true, accounts });
+    return NextResponse.json({ success: true, data: accounts });
   } catch (e) {
     return NextResponse.json({
       success: false,

@@ -18,14 +18,14 @@ const Login = () => {
           </p>
 
           <Button
-            className="mt-4 flex items-center w-full h-[56px] rounded bg-red-600 !text-white hover:bg-red-500 transition"
+            className="mt-4 flex items-center w-full h-[56px] rounded !bg-red-600 !text-white hover:opacity-90 transition"
             onClick={() => signIn("google")}
           >
             <FaGoogle className="w-7 h-7 mr-2" />
             Sign in with Google
           </Button>
           <Button
-            className="mt-4 flex items-center w-full h-[56px] rounded bg-red-600 !text-white hover:bg-red-500 transition"
+            className="mt-4 flex items-center w-full h-[56px] rounded !bg-gray-400 !text-white hover:opacity-90 transition"
             onClick={() => signIn("github")}
           >
             <AiFillGithub className="w-7 h-7 mr-2" />

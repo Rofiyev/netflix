@@ -12,3 +12,13 @@ export interface IAccount {
 export interface ChildProps {
   children: React.ReactNode;
 }
+
+export interface AxiosResponse {
+  success: boolean;
+  data?: IAccount[];
+  message: string;
+}
+
+export interface AccountResponse extends AxiosResponse {
+  data?: IAccount[] | IAccount;
+}
