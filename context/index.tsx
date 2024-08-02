@@ -1,22 +1,44 @@
 "use client";
 
-import { ChildProps, ContextType } from "@/types";
-import { FC, createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
+import { IAccount, ChildProps, ContextType, MovieProps } from "@/types";
 
-export const Context = createContext<ContextType | undefined>(undefined);
+export const Context = createContext<ContextType | null>(null);
 
-const GlobalContext: FC<ChildProps> = ({ children }) => {
-  const [account, setAccount] = useState(null);
+const GlobalContext = ({ children }: ChildProps) => {
+  const [account, setAccount] = useState<IAccount | null>(null);
+  const [pageLoader, setPageLoader] = useState<boolean>(true);
+  const [open, setOpen] = useState<boolean>(false);
+  const [movie, setMovie] = useState<MovieProps | null>(null);
 
-  return <Context.Provider value={{ account }}>{children}</Context.Provider>;
+  useEffect(() => {
+    setAccount(JSON.parse(sessionStorage.getItem("account")!));
+  }, []);
+
+  return (
+    <Context.Provider
+      value={{
+        account,
+        setAccount,
+        pageLoader,
+        setPageLoader,
+        open,
+        setOpen,
+        movie,
+        setMovie,
+      }}
+    >
+      {children}
+    </Context.Provider>
+  );
 };
 
 export default GlobalContext;
 
 export const useGlobalContext = () => {
-  const context = useContext<ContextType | undefined>(Context);
-
-  if (!context) throw new Error("Context value is undefined");
-
+  const context = useContext(Context);
+  if (context === null) {
+    throw new Error("useGlobalContext must be used within a GlobalContext");
+  }
   return context;
 };

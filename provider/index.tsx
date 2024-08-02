@@ -8,7 +8,7 @@ import { Toaster } from "@/components/ui/toaster";
 export function Provider({ children, ...props }: ThemeProviderProps) {
   return (
     <NextThemesProvider {...props}>
-       <Toaster />
+      <Toaster />
       <SessionProvider>{children}</SessionProvider>
     </NextThemesProvider>
   );

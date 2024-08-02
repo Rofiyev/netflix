@@ -13,11 +13,14 @@ import axios from "axios";
 import { useSession } from "next-auth/react";
 import { toast } from "../ui/use-toast";
 import { ACCOUNT_LIMIT } from "@/config";
+import { Skeleton } from "../ui/skeleton";
 
 const ManageAccount = () => {
   const [isDelete, setIsDelete] = useState<boolean>(false);
   const [state, setState] = useState<"login" | "create">("create");
   const [accounts, setAccounts] = useState<IAccount[]>([]);
+  const [currentAccount, setCurrentAccount] = useState<IAccount | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const { setOpen } = useModal();
   const { data: session }: any = useSession();
 
@@ -27,7 +30,6 @@ const ManageAccount = () => {
         const { data } = await axios.get<AccountResponse>(
           `/api/account?uid=${session?.user?.uid}`
         );
-        console.log(data);
         data.data && setAccounts(data.data as IAccount[]);
       } catch (error) {
         return toast({
@@ -35,6 +37,8 @@ const ManageAccount = () => {
           description: "An error occurred while creating your account!",
           variant: "destructive",
         });
+      } finally {
+        setIsLoading(false);
       }
     })();
   }, [session]);
@@ -44,10 +48,11 @@ const ManageAccount = () => {
     setState("create");
   };
 
-  const switchAccountHandler = () => {
+  const switchAccountHandler = (account: IAccount) => {
     if (isDelete) return;
     setOpen(true);
     setState("login");
+    setCurrentAccount(account);
   };
 
   const onDelete = async (id: string) => {
@@ -90,37 +95,51 @@ const ManageAccount = () => {
         <h1 className="text-white font-bold text-5xl my-12">Who`s Watching</h1>
 
         <ul className="flex p-0 my-12">
-          {accounts.map((account: IAccount) => (
-            <li
-              key={account._id}
-              onClick={switchAccountHandler}
-              className="max-w-[200px] w-[155px] cursor-pointer flex flex-col items-center gap-3 min-w-[200px]"
-            >
-              <div className="relative">
-                <div className="max-w-[200px] rounded min-w-[84px] max-h-[200px] min-h-[84px] object-cover w-[155px] h-[155px] relative">
-                  <Image src="/user.png" alt="image" fill />
-                </div>
-                {isDelete && (
-                  <div
-                    onClick={() => onDelete(account._id)}
-                    className="absolute transform bottom-0 z-10 cursor-pointer"
-                  >
-                    <Trash2 className="w-8 h-8 text-red-600" />
+          {isLoading ? (
+            <>
+              {Array.from({ length: 4 }).map((_, i: number) => (
+                <Skeleton
+                  key={i}
+                  className="max-w-[200px] mx-4 rounded min-w-[84px] max-h-[200px] min-h-[84px] object-cover w-[155px] h-[155px]"
+                />
+              ))}
+            </>
+          ) : (
+            <>
+              {accounts.map((account: IAccount) => (
+                <li
+                  key={account._id}
+                  onClick={() => switchAccountHandler(account)}
+                  className="max-w-[200px] w-[155px] cursor-pointer flex flex-col items-center gap-3 min-w-[200px]"
+                >
+                  <div className="relative">
+                    <div className="max-w-[200px] min-w-[84px] max-h-[200px] min-h-[84px] object-cover w-[155px] h-[155px] relative">
+                      <Image src="/user.png" alt="image" fill className="rounded" />
+                    </div>
+                    {isDelete && (
+                      <div
+                        onClick={() => onDelete(account._id)}
+                        className="absolute transform bottom-0 z-10 cursor-pointer"
+                      >
+                        <Trash2 className="w-8 h-8 text-red-600" />
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>
-              <div className="flex gap-1">
-                <span className="font-mono font-bold text-2xl">
-                  {account.name}
-                </span>
-                <LockKeyhole />
-              </div>
-            </li>
-          ))}
-          {accounts.length < ACCOUNT_LIMIT && (
+                  <div className="flex flex-col justify-center items-center gap-1">
+                    <span className="font-mono font-bold text-xl text-nowrap">
+                      {account.name}
+                    </span>
+                    <LockKeyhole />
+                  </div>
+                </li>
+              ))}
+            </>
+          )}
+
+          {accounts.length < ACCOUNT_LIMIT && !isLoading && (
             <li
               onClick={addAccountHandler}
-              className="border text-white bg-[#e5b109] font-bold text-xl border-black max-w-[200px] rounded min-w-[84px] max-h-[200px] min-h-[84px] w-[155px] h-[155px] cursor-pointer flex justify-center items-center"
+              className="border text-white bg-[#e5b109] font-bold text-xl border-black max-w-[200px] rounded min-w-[84px] max-h-[200px] min-h-[84px] w-[155px] h-[155px] cursor-pointer flex justify-center items-center ml-4"
             >
               Add account
             </li>
@@ -136,7 +155,9 @@ const ManageAccount = () => {
 
         {/* Use Modal Provider */}
         <Modal>
-          {state === "login" && <LoginAccountForm />}
+          {state === "login" && (
+            <LoginAccountForm currentAccount={currentAccount} />
+          )}
           {state === "create" && (
             <CreateAccountForm
               uid={session?.user?.uid}
