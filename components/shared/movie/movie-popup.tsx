@@ -148,8 +148,7 @@ const MoviePopup = () => {
               </h2>
 
               <div className="grid grid-cols-4 gap-3 items-center scrollbar-hide md:p-2">
-                {similarMovies &&
-                  similarMovies.length &&
+                {Array.isArray(similarMovies) &&
                   similarMovies
                     .filter(
                       (item) =>

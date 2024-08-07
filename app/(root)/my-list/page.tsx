@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useSession } from "next-auth/react";
 import { useGlobalContext } from "@/context";
 import { useEffect, useState } from "react";
@@ -11,6 +12,7 @@ import ManageAccount from "@/components/shared/manage-account";
 import Loader from "@/components/shared/loader";
 import MovieItem from "@/components/shared/movie/movie-item";
 import Navbar from "@/components/Navbar";
+import BottomNavbar from "@/components/BottomNavbar";
 import Banner from "@/components/shared/banner";
 import { useRouter } from "next/navigation";
 
@@ -25,7 +27,6 @@ const Page = () => {
     const getData = async () => {
       try {
         const { data } = await getFavourites(session?.user?.uid, account?._id!);
-        console.log(data);
         setFavourites(data);
       } catch (e) {
         return toast({
@@ -40,6 +41,11 @@ const Page = () => {
     if (session && account) getData();
   }, [account, session]);
 
+  const handelRoute = () => {
+    setPageLoader(true);
+    router.push("/");
+  };
+
   if (session === null) return <Login />;
   if (account === null) return <ManageAccount />;
   if (pageLoader) return <Loader />;
@@ -48,32 +54,33 @@ const Page = () => {
     <main className={"flex min-h-screen flex-col"}>
       <Navbar />
       <div className={"md:px-12 px-4"}>
-        {favourites && favourites.length === 0 ? (
-          <div className="lg:px-24 lg:py-24 md:py-20 md:px-44 px-4 py-24 items-center flex justify-center flex-col-reverse lg:flex-row md:gap-28 gap-16">
+        {Array.isArray(favourites) && !favourites.length ? (
+          <div className="lg:px-16 md:px-14 px-2 py-32 flex items-center justify-center flex-col-reverse lg:flex-row md:gap-28 gap-12">
             <div className="xl:pt-24 w-full xl:w-1/2 relative pb-12 lg:pb-0">
               <div className="relative">
-                <div className="">
-                  <h1 className="my-2 text-gray-100 font-bold text-2xl">
-                    Looks like you don`t have any favourites yet!
-                  </h1>
-                  <p className="my-2 text-gray-300">
-                    Sorry about that! Please visit our hompage to get where you
-                    need to go.
-                  </p>
-                  <button
-                    className="sm:w-full lg:w-auto my-2 border rounded md py-4 px-8 text-center bg-red-600 text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-indigo-700 focus:ring-opacity-50"
-                    onClick={() => {
-                      setPageLoader(true);
-                      router.push("/");
-                    }}
-                  >
-                    Take me there!
-                  </button>
-                </div>
+                <h1 className="my-2 text-gray-100 font-bold text-2xl">
+                  Looks like you don`t have any favourites yet!
+                </h1>
+                <p className="my-2 text-gray-300">
+                  Sorry about that! Please visit our hompage to get where you
+                  need to go.
+                </p>
+                <button
+                  className="sm:w-full lg:w-auto my-2 border rounded md py-4 px-8 text-center bg-red-600 text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-indigo-700 focus:ring-opacity-50"
+                  onClick={handelRoute}
+                >
+                  Take me there!
+                </button>
               </div>
             </div>
-            <div>
-              <img src="https://i.ibb.co/ck1SGFJ/Group.png" />
+            <div className="relative w-1/2 h-full">
+              <Image
+                src="https://i.ibb.co/ck1SGFJ/Group.png"
+                alt="Not found image"
+                width={500}
+                height={300}
+                objectFit="cover"
+              />
             </div>
           </div>
         ) : (
@@ -112,6 +119,9 @@ const Page = () => {
             </div>
           </>
         )}
+      </div>
+      <div className="block lg:hidden">
+        <BottomNavbar />
       </div>
     </main>
   );

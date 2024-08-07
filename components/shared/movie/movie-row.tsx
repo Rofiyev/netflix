@@ -15,16 +15,16 @@ interface Props {
 
 const MovieRow = ({ title, data }: Props) => {
   return (
-    <div className={"h-40 space-y-0.5 md:space-y-2 px-4"}>
-      <h2 className="cursor-pointer text-sm font-semibold text-[#e5e5e5] transition-colors duration-200 hover:text-white md:text-2xl">
+    <div className={"sm:h-40 space-y-0.5 md:space-y-2 sm:px-4 mb-4"}>
+      <h2 className="cursor-pointer text-xl font-semibold text-[#e5e5e5] transition-colors duration-200 hover:text-white md:text-2xl">
         {title}
       </h2>
 
-      <div className={"group relative md:-ml-2"}>
+      <div className={"relative md:-ml-2"}>
         <Slider
           {...settings}
           className={
-            "flex items-center gap-2 scrollbar-hide space-x-0.5 overflow-x-scroll md:space-x-2.5 md:p-2"
+            "flex items-center scrollbar-hide space-x-0.5 overflow-x-scroll md:space-x-5 md:p-2"
           }
         >
           {data &&

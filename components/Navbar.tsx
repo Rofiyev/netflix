@@ -31,7 +31,7 @@ const Navbar = () => {
   const router = useRouter();
 
   useEffect(() => {
-    (async () => {
+    const getData = async () => {
       setIsLoading(true);
       try {
         const { data } = await axios.get<AccountResponse>(
@@ -47,17 +47,21 @@ const Navbar = () => {
       } finally {
         setIsLoading(false);
       }
-    })();
+    };
 
+    if (session) getData();
+  }, [session]);
+
+  useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 100) setIsScrolled(true);
+      if (window.scrollY > 0) setIsScrolled(true);
       else setIsScrolled(false);
     };
 
     window.addEventListener("scroll", handleScroll);
 
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [session.user.uid]);
+  }, []);
 
   const logout = () => {
     sessionStorage.removeItem("account");

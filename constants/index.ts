@@ -2,22 +2,22 @@ import { IMenuItem } from "@/types";
 
 export const menuItems: IMenuItem[] = [
   {
-    id: "home",
+    id: 1,
     name: "Home",
     route: "/browse",
   },
   {
-    id: "tv",
+    id: 2,
     name: "TV Shows",
     route: "/tv",
   },
   {
-    id: "movies",
+    id: 3,
     name: "Movies",
     route: "/movies",
   },
   {
-    id: "my-list",
+    id: 4,
     name: "My List",
     route: "/my-list",
   },

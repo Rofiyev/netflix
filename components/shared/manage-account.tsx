@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { LockKeyhole, Trash2 } from "lucide-react";
 import { Button } from "../ui/button";
 import useModal from "@/zustand/modal";
@@ -90,61 +90,73 @@ const ManageAccount = () => {
   };
 
   return (
-    <div className="min-h-screen flex justify-center flex-col items-center relative">
+    <div className="min-h-screen flex justify-center flex-col items-center relative pb-4">
       <div className="flex justify-center flex-col items-center">
-        <h1 className="text-white font-bold text-5xl my-12">Who`s Watching</h1>
+        <h1 className="text-white font-bold text-4xl sm:text-5xl my-12">
+          Who`s Watching
+        </h1>
 
-        <ul className="flex p-0 my-12">
-          {isLoading ? (
-            <>
-              {Array.from({ length: 4 }).map((_, i: number) => (
-                <Skeleton
-                  key={i}
-                  className="max-w-[200px] mx-4 rounded min-w-[84px] max-h-[200px] min-h-[84px] object-cover w-[155px] h-[155px]"
-                />
-              ))}
-            </>
-          ) : (
-            <>
-              {accounts.map((account: IAccount) => (
+        {isLoading ? (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-12">
+            {Array.from({ length: 4 }).map((_, i: number) => (
+              <div className="flex flex-col" key={i}>
+                <Skeleton className="max-w-[180px] rounded min-w-[84px] max-h-[200px] min-h-[84px] object-cover w-[155px] h-[155px]" />
+                <Skeleton className="h-4 w-11/12 mx-auto mt-3" />
+              </div>
+            ))}
+          </div>
+        ) : (
+          <ul
+            className={`w-full h-full grid grid-cols-2 gap-y-4 p-0 my-12 ${
+              accounts.length >= 2 && "md:grid-cols-3"
+            } ${accounts.length > 3 && "lg:grid-cols-4"}`}
+          >
+            {Array.isArray(accounts) &&
+              accounts.map((account: IAccount) => (
                 <li
                   key={account._id}
                   onClick={() => switchAccountHandler(account)}
-                  className="max-w-[200px] w-[155px] cursor-pointer flex flex-col items-center gap-3 min-w-[200px]"
+                  className="max-w-[180px] w-[155px] cursor-pointer flex flex-col items-center gap-3 min-w-[180px]"
                 >
                   <div className="relative">
                     <div className="max-w-[200px] min-w-[84px] max-h-[200px] min-h-[84px] object-cover w-[155px] h-[155px] relative">
-                      <Image src="/user.png" alt="image" fill className="rounded" />
+                      <Image
+                        src="/user.png"
+                        alt="image"
+                        fill
+                        className="rounded"
+                      />
                     </div>
                     {isDelete && (
                       <div
                         onClick={() => onDelete(account._id)}
-                        className="absolute transform bottom-0 z-10 cursor-pointer"
+                        className="absolute transform bottom-0 z-10 cursor-pointer bg-slate-900 p-1 rounded-tr"
                       >
-                        <Trash2 className="w-8 h-8 text-red-600" />
+                        <Trash2 className="w-5 h-5 text-red-600" />
                       </div>
                     )}
+                    <div className="absolute top-1 left-1">
+                      <LockKeyhole className="text-white opacity-60" />
+                    </div>
                   </div>
                   <div className="flex flex-col justify-center items-center gap-1">
                     <span className="font-mono font-bold text-xl text-nowrap">
                       {account.name}
                     </span>
-                    <LockKeyhole />
                   </div>
                 </li>
               ))}
-            </>
-          )}
 
-          {accounts.length < ACCOUNT_LIMIT && !isLoading && (
-            <li
-              onClick={addAccountHandler}
-              className="border text-white bg-[#e5b109] font-bold text-xl border-black max-w-[200px] rounded min-w-[84px] max-h-[200px] min-h-[84px] w-[155px] h-[155px] cursor-pointer flex justify-center items-center ml-4"
-            >
-              Add account
-            </li>
-          )}
-        </ul>
+            {accounts.length < ACCOUNT_LIMIT && !isLoading && (
+              <li
+                onClick={addAccountHandler}
+                className="border text-white bg-[#e5b109] font-bold text-xl border-black max-w-[180px] rounded min-w-[84px] max-h-[180px] min-h-[84px] w-[155px] h-[155px] cursor-pointer flex justify-center items-center ml-3"
+              >
+                Add account
+              </li>
+            )}
+          </ul>
+        )}
 
         <Button
           onClick={() => setIsDelete((prev: boolean) => !prev)}

@@ -31,7 +31,7 @@ export interface AccountResponse extends AxiosResponse {
 }
 
 export interface IMenuItem {
-  id: string;
+  id: number;
   name: string;
   route: string;
 }
