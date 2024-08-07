@@ -6,9 +6,9 @@
 ### Open the project yourself!
 
 ```bash
-git clone https://github.com/Rofiyev/nextjs-auth-clerk.git
+git clone https://github.com/Rofiyev/netflix.git
 
-cd nextjs-auth-clerk
+cd netflix
 
 npm install
 
