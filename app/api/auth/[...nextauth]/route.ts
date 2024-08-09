@@ -24,7 +24,7 @@ const authOptions: NextAuthOptions = {
       return session;
     },
   },
-  secret: process.env.SECRET_KEY,
+  secret: process.env.SECRET_KEY as string,
 };
 
 const handler = NextAuth(authOptions);
