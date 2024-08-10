@@ -19,9 +19,10 @@ import { IAccount, AccountResponse } from "@/types";
 import { toast } from "@/components/ui/use-toast";
 import { Skeleton } from "@/components/ui/skeleton";
 import SearchBar from "./SearchBar";
+import UseSearchInput from "@/zustand/searchInput";
 
 const Navbar = () => {
-  const [showSearchBar, setShowSearchBar] = useState<boolean>(false);
+  const { setOpenSearchInput, isOpenSearchInput } = UseSearchInput();
   const [isScrolled, setIsScrolled] = useState<boolean>(false);
   const [accounts, setAccounts] = useState<IAccount[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -83,13 +84,15 @@ const Navbar = () => {
             width={120}
             height={120}
             alt="NETFLIX"
-            className="cursor-pointer object-contain"
+            className={`cursor-pointer object-contain ${
+              isOpenSearchInput && "hidden md:inline-block"
+            }`}
             onClick={() => {
               router.push("/browse");
               setPageLoader(true);
             }}
           />
-          <ul className={"hidden md:space-x-4 md:flex cursor-pointer"}>
+          <ul className={"hidden md:space-x-4 lg:flex cursor-pointer"}>
             {menuItems.map((item) => (
               <li
                 onClick={() => {
@@ -110,12 +113,12 @@ const Navbar = () => {
         <MoviePopup />
 
         <div className={"font-light flex items-center space-x-4 text-sm"}>
-          {showSearchBar ? (
-            <SearchBar setShowSearchBar={setShowSearchBar} />
+          {isOpenSearchInput ? (
+            <SearchBar />
           ) : (
             <AiOutlineSearch
-              onClick={() => setShowSearchBar((prev) => !prev)}
-              className={"hidden sm:inline sm:w-6 sm:h-6 cursor-pointer"}
+              onClick={() => setOpenSearchInput(!isOpenSearchInput)}
+              className={"inline w-6 h-6 cursor-pointer"}
             />
           )}
 

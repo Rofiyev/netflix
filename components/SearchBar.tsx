@@ -1,19 +1,13 @@
 "use client";
 
-import React, {
-  Dispatch,
-  SetStateAction,
-  useState,
-  KeyboardEvent,
-} from "react";
+import React, { useState, KeyboardEvent } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
 import { usePathname, useRouter } from "next/navigation";
 import { useGlobalContext } from "@/context";
+import UseSearchInput from "@/zustand/searchInput";
 
-interface Props {
-  setShowSearchBar: Dispatch<SetStateAction<boolean>>;
-}
-const SearchBar = ({ setShowSearchBar }: Props) => {
+const SearchBar = () => {
+  const { setOpenSearchInput } = UseSearchInput();
   const [query, setQuery] = useState("");
 
   const router = useRouter();
@@ -23,16 +17,13 @@ const SearchBar = ({ setShowSearchBar }: Props) => {
   const handleKeySubmit = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && query && query.trim() !== "") {
       setPageLoader(true);
-      if (pathname !== "/search") {
-        router.replace(`/search/${query}`);
-      } else {
-        router.push(`/search/${query}`);
-      }
+      if (pathname !== "/search") router.replace(`/search/${query}`);
+      else router.push(`/search/${query}`);
     }
   };
 
   return (
-    <div className={"hidden md:flex justify-center items-center text-center"}>
+    <div className={"flex justify-center items-center text-center"}>
       <div className="bg-[rgba(0,0,0,0.75)] border border-[hsla(0,0%,100%,0.5)] rounded-sm pr-2 items-center text-center flex">
         <div className={"order-2"}>
           <input
@@ -45,8 +36,8 @@ const SearchBar = ({ setShowSearchBar }: Props) => {
         </div>
         <button className="px-2.5">
           <AiOutlineSearch
-            onClick={() => setShowSearchBar(false)}
-            className="hidden sm:inline sm:w-6 sm:h-6 cursor-pointer"
+            onClick={() => setOpenSearchInput(false)}
+            className="inline w-6 h-6 cursor-pointer"
           />
         </button>
       </div>

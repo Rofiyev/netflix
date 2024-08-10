@@ -20,7 +20,7 @@ const Common: FC<Props> = ({ moviesData }) => {
       </div>
 
       <div className={"relative pl-4 pb-20 md:pb-4 lg:space-y-24"}>
-        <Banner movies={moviesData && moviesData[0].data} />
+        <Banner movies={moviesData && moviesData[0]?.data} />
 
         <section className={"md:space-y-16"}>
           {Array.isArray(moviesData) &&
