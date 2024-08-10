@@ -92,7 +92,11 @@ const Page = () => {
               </h2>
 
               <div className={"group relative md:-ml-2 pb-12"}>
-                <div className={"grid grid-cols-5 gap-4"}>
+                <div
+                  className={
+                    "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+                  }
+                >
                   {favourites &&
                     favourites
                       .map((fav: FavouriteProps) => (
