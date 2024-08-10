@@ -9,7 +9,7 @@ import { signIn } from "next-auth/react";
 const Login = () => {
   return (
     <div className="w-full h-screen">
-      <div className="absolute inset-0">
+      <div className="absolute inset-0 bg-slate-950">
         <Image src="/background.jpg" alt="image" fill className="opacity-50 object-cover" />
       </div>
       <div className="relative z-10 w-11/12 md:w-[600px] bg-black/60 rounded-md h-[50vh] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 px-8 py-4">

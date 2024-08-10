@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { Fragment, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { LockKeyhole, Trash2 } from "lucide-react";
 import { Button } from "../ui/button";
 import useModal from "@/zustand/modal";
