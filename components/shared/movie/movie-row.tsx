@@ -27,13 +27,15 @@ const MovieRow = ({ title, data }: Props) => {
             "flex items-center scrollbar-hide space-x-0.5 overflow-x-scroll md:space-x-5 md:p-2"
           }
         >
-          {data &&
+          {Array.isArray(data) &&
             data
               .filter(
-                (item) =>
+                (item: MovieProps) =>
                   item.backdrop_path !== null && item.poster_path !== null
               )
-              .map((movie) => <MovieItem key={movie.id} movie={movie} />)}
+              .map((movie: MovieProps) => (
+                <MovieItem key={movie.id} movie={movie} />
+              ))}
         </Slider>
       </div>
     </div>

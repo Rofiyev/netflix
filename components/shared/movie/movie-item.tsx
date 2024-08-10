@@ -2,16 +2,8 @@
 
 import { FavouriteProps, MovieProps } from "@/types";
 import { motion } from "framer-motion";
-import Image from "next/image";
-import {
-  CheckIcon,
-  ChevronDown,
-  Loader2,
-  MinusIcon,
-  PlusIcon,
-} from "lucide-react";
+import { ChevronDown, Loader2, MinusIcon, PlusIcon } from "lucide-react";
 import { useGlobalContext } from "@/context";
-import { usePathname, useRouter } from "next/navigation";
 import { toast } from "@/components/ui/use-toast";
 import axios from "axios";
 import { useSession } from "next-auth/react";
@@ -25,9 +17,9 @@ interface Props {
 }
 
 const MovieItem: FC<Props> = ({ movie, favouriteId = "", setFavourites }) => {
-  const { account, open, setOpen, setMovie } = useGlobalContext();
+  const { account, setOpen, setMovie } = useGlobalContext();
   const { data: session }: any = useSession();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const onHandlerPopup = () => {
     setMovie(movie);
@@ -108,7 +100,7 @@ const MovieItem: FC<Props> = ({ movie, favouriteId = "", setFavourites }) => {
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.8, delay: 0.5, ease: [0, 0.71, 0.2, 1.01] }}
     >
-      <div className="relative cardWrapper mx-1 h-44 min-w-[180px] cursor-pointer md:h-40 md:min-w-[260px] transform transition duration-500 hover:scale-95 hover:z-[999] md:rounded">
+      <div className="relative cardWrapper mx-1 h-44 min-w-[180px] cursor-pointer md:h-40 md:min-w-[260px] transform transition duration-500 hover:scale-95 hover:z-[99] md:rounded">
         <CustomImage
           image={`${process.env.NEXT_PUBLIC_TMDB_IMAGE_BASE_URL}${
             movie?.backdrop_path || movie?.poster_path

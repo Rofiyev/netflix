@@ -11,7 +11,6 @@ import {
 import { useGlobalContext } from "@/context";
 import { signOut, useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
-import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import MoviePopup from "@/components/shared/movie/movie-popup";
 import axios from "axios";
@@ -23,7 +22,6 @@ import UseSearchInput from "@/zustand/searchInput";
 
 const Navbar = () => {
   const { setOpenSearchInput, isOpenSearchInput } = UseSearchInput();
-  const [isScrolled, setIsScrolled] = useState<boolean>(false);
   const [accounts, setAccounts] = useState<IAccount[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -53,30 +51,28 @@ const Navbar = () => {
     if (session) getData();
   }, [session]);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 0) setIsScrolled(true);
-      else setIsScrolled(false);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
   const logout = () => {
     sessionStorage.removeItem("account");
     signOut();
     setAccount(null);
   };
 
+  const routerChange = (route: string) => {
+    router.push(route);
+    setPageLoader(true);
+  };
+
+  const handleAccount = () => {
+    setAccount(null);
+    sessionStorage.removeItem("account");
+  };
+
   return (
     <div className={"relative"}>
       <header
-        className={cn(
-          "header h-[10vh] transition-all duration-400 ease-in-out",
-          isScrolled && "bg-background/80 backdrop-blur-md"
-        )}
+        className={
+          "flex w-full items-center justify-between px-4 lg:px-14 text-white h-[10vh] duration-400 ease-in-out bg-background/80 backdrop-blur-md"
+        }
       >
         <div className={"flex items-center h-full space-x-2 md:space-x-10"}>
           <Image
@@ -87,18 +83,12 @@ const Navbar = () => {
             className={`cursor-pointer object-contain ${
               isOpenSearchInput && "hidden md:inline-block"
             }`}
-            onClick={() => {
-              router.push("/browse");
-              setPageLoader(true);
-            }}
+            onClick={() => routerChange("/browse")}
           />
           <ul className={"hidden md:space-x-4 lg:flex cursor-pointer"}>
             {menuItems.map((item) => (
               <li
-                onClick={() => {
-                  router.push(item.route);
-                  setPageLoader(true);
-                }}
+                onClick={() => routerChange(item.route)}
                 key={item.route}
                 className={
                   "cursor-pointer text-[16px] font-light text-[#e5e5e5] transition duration-[.4s] hover:text-[#b3b3b3]"
@@ -150,10 +140,7 @@ const Navbar = () => {
                       "cursor-pointer flex gap-3 h-14 hover:bg-slate-800 rounded-md items-center px-4 py-2"
                     }
                     key={account._id}
-                    onClick={() => {
-                      setAccount(null);
-                      sessionStorage.removeItem("account");
-                    }}
+                    onClick={handleAccount}
                   >
                     <Image
                       width={30}

@@ -16,8 +16,7 @@ const MoviePopup = () => {
   );
   const [similarMovies, setSimilarMovies] = useState<MovieProps[]>([]);
   const [key, setKey] = useState<string>();
-  const [isLoading, setIsLoading] = useState(false);
-
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const { open, setOpen, movie } = useGlobalContext();
 
   useEffect(() => {
@@ -147,7 +146,7 @@ const MoviePopup = () => {
                 More Like This
               </h2>
 
-              <div className="grid grid-cols-4 gap-3 items-center scrollbar-hide md:p-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 items-center scrollbar-hide md:p-2">
                 {Array.isArray(similarMovies) &&
                   similarMovies
                     .filter(

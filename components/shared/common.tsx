@@ -24,7 +24,7 @@ const Common: FC<Props> = ({ moviesData }) => {
 
         <section className={"md:space-y-16"}>
           {Array.isArray(moviesData) &&
-            moviesData.map((movie) => (
+            moviesData.map((movie: MovieDataProps) => (
               <MovieRow
                 title={movie.title}
                 data={movie.data}

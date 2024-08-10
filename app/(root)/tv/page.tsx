@@ -47,7 +47,7 @@ const Page = () => {
           { title: "Drama", data: drama },
           { title: "Family", data: family },
           { title: "War", data: war },
-        ].map((item) => ({
+        ].map((item: MovieDataProps) => ({
           ...item,
           data: item.data.map((movie: MovieProps) => ({
             ...movie,

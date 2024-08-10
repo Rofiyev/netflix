@@ -75,12 +75,6 @@
   }
 }
 
-@layer components {
-  .header {
-    @apply fixed top-0 !z-[99999999] flex w-full items-center justify-between px-4 transition-all lg:px-14 text-white;
-  }
-}               
-
 .cardWrapper:hover {
   background: black;
 }

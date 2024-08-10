@@ -39,15 +39,17 @@ const BottomNavbar = () => {
     />,
   ];
 
+  const changeRoute = (route: string) => {
+    router.push(route);
+    setPageLoader(true);
+  };
+
   return (
     <div className="fixed z-50 bottom-0 left-0 w-screen h-14 bg-slate-900">
       <ul className={"flex justify-around items-center px-4 mt-1"}>
         {menuItems.map((item) => (
           <li
-            onClick={() => {
-              router.push(item.route);
-              setPageLoader(true);
-            }}
+            onClick={() => changeRoute(item.route)}
             key={item.route}
             className={`w-20 h-20 flex flex-col p-1 rounded-full bg-slate-900 items-center cursor-pointer text-[16px] font-light text-[#e5e5e5] transition duration-[.4s] hover:text-[#b3b3b3] ${
               pathname === item.route && "-translate-y-7"

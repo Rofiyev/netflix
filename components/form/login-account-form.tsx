@@ -58,7 +58,7 @@ const LoginAccountForm: FC<Props> = ({ currentAccount }) => {
   }
 
   return (
-    <>
+    <div className="w-full">
       <h1 className="text-gray-400 font-bold text-[16px] mb-4">
         Profile Lock is currently ON
       </h1>
@@ -87,8 +87,8 @@ const LoginAccountForm: FC<Props> = ({ currentAccount }) => {
           }}
           inputStyle={{
             color: "white",
-            height: "70px",
-            width: "70px",
+            height: "65px",
+            width: "65px",
             fontSize: "40px",
             borderRadius: "6px",
           }}
@@ -100,7 +100,7 @@ const LoginAccountForm: FC<Props> = ({ currentAccount }) => {
 
         {isLoading && <Loading className="ml-1" />}
       </div>
-    </>
+    </div>
   );
 };
 

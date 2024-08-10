@@ -25,7 +25,7 @@ const ManageAccount = () => {
   const { data: session }: any = useSession();
 
   useEffect(() => {
-    (async () => {
+    const getData = async () => {
       try {
         const { data } = await axios.get<AccountResponse>(
           `/api/account?uid=${session?.user?.uid}`
@@ -40,7 +40,8 @@ const ManageAccount = () => {
       } finally {
         setIsLoading(false);
       }
-    })();
+    };
+    if (session) getData();
   }, [session]);
 
   useEffect(() => setOpen(false), [setOpen]);

@@ -56,8 +56,8 @@ const Page = () => {
     getData();
   }, []);
 
-  if (session === null) return <Login />;
-  if (account === null) return <ManageAccount />;
+  if (!session) return <Login />;
+  if (!account) return <ManageAccount />;
   if (pageLoader) return <Loader />;
 
   return (
@@ -73,9 +73,11 @@ const Page = () => {
         </h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-3 items-center scrollbar-hide md:p-2">
-          {movies &&
+          {Array.isArray(movies) &&
             movies.length &&
-            movies.map((movie) => <MovieItem key={movie.id} movie={movie} />)}
+            movies.map((movie: MovieProps) => (
+              <MovieItem key={movie.id} movie={movie} />
+            ))}
         </div>
       </div>
     </motion.div>

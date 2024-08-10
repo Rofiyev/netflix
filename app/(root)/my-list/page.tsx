@@ -17,11 +17,10 @@ import Banner from "@/components/shared/banner";
 import { useRouter } from "next/navigation";
 
 const Page = () => {
-  const [favourites, setFavourites] = useState<FavouriteProps[]>([]);
-
-  const { data: session }: any = useSession();
-  const { account, setPageLoader, pageLoader } = useGlobalContext();
   const router = useRouter();
+  const { account, setPageLoader, pageLoader } = useGlobalContext();
+  const [favourites, setFavourites] = useState<FavouriteProps[]>([]);
+  const { data: session }: any = useSession();
 
   useEffect(() => {
     const getData = async () => {
@@ -46,8 +45,8 @@ const Page = () => {
     router.push("/");
   };
 
-  if (session === null) return <Login />;
-  if (account === null) return <ManageAccount />;
+  if (!session) return <Login />;
+  if (!account) return <ManageAccount />;
   if (pageLoader) return <Loader />;
 
   return (
