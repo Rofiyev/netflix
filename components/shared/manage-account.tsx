@@ -43,7 +43,7 @@ const ManageAccount = () => {
     })();
   }, [session]);
 
-  useEffect(() => setOpen(false), []);
+  useEffect(() => setOpen(false), [setOpen]);
 
   const addAccountHandler = () => {
     setOpen(true);
