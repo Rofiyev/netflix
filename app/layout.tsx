@@ -13,6 +13,11 @@ export const metadata: Metadata = {
   title: "Netflix | @rof1yev",
   description:
     "You can watch as much as you want, whenever you want without a single commercial – all for one low monthly price. There's always something new to discover and new TV shows and movies are added every week!",
+  authors: [
+    { name: "Dilshod Rofiyev", url: "https://www.instagram.com/rof1yev/" },
+  ],
+  applicationName: "Movie Application",
+  keywords: "movie, tv, serial, kino",
   icons: [
     {
       url: "/netflix-icon.svg",
