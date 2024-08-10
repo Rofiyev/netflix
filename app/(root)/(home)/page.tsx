@@ -1,5 +1,8 @@
+import React from "react";
 import { redirect } from "next/navigation";
 
-export default function Page() {
+const Page = () => {
   return redirect("/browse");
-}
+};
+
+export default Page;
